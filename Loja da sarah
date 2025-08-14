@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Lojinha da Sarah — Preços Baixos</title>
+  <meta name="description" content="Lojinha da Sarah: Bíblias, Harpa Cristã e tudo para o lar com preços baixos. Compre online com segurança." />
+  <style>
+    :root{
+      --brand:#ff4d4f; /* vermelho promo */
+      --brand-2:#ff7a45; /* laranja */
+      --bg:#f7f7fb;
+      --card:#ffffff;
+      --ink:#222;
+      --muted:#666;
+      --ok:#10b981;
+      --warn:#f59e0b;
+      --radius:16px;
+      --shadow:0 10px 25px rgba(0,0,0,.08);
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Inter,Arial,sans-serif;background:var(--bg);color:var(--ink)}
+    a{color:inherit;text-decoration:none}
+    img{max-width:100%;display:block}
+
+    /* Header */
+    .topbar{position:sticky;top:0;z-index:50;background:#fff;box-shadow:var(--shadow)}
+    .wrap{max-width:1200px;margin:0 auto;padding:12px 16px}
+    .row{display:flex;align-items:center;gap:12px}
+    .between{justify-content:space-between}
+
+    .logo{display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:.2px}
+    .logo .cart-emoji{display:inline-grid;place-items:center;width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,var(--brand),var(--brand-2));transition:.25s transform,.25s filter,.25s background}
+    .logo .cart-emoji span{font-size:24px;line-height:1}
+    .logo .cart-emoji:hover{transform:rotate(-8deg) scale(1.05);filter:saturate(1.3)}
+
+    .search{flex:1;display:flex;gap:8px}
+    .search input[type="search"], .search select{width:100%;padding:12px 14px;border:1px solid #e7e7ef;border-radius:12px;background:#fff}
+    .search button{padding:12px 16px;border-radius:12px;border:0;background:var(--ink);color:#fff;font-weight:600;cursor:pointer}
+
+    .icons{display:flex;align-items:center;gap:10px}
+    .mini{position:relative;display:inline-flex;align-items:center;gap:8px;padding:10px 12px;border-radius:12px;background:#fff;border:1px solid #eee;cursor:pointer}
+    .mini .count{position:absolute;top:-6px;right:-6px;background:var(--brand);color:#fff;border-radius:999px;font-size:12px;padding:2px 6px;font-weight:700}
+    .mini .label{font-weight:700}
+
+    /* Hero */
+    .hero{background:linear-gradient(135deg,#fff, #ffece8);border-bottom:1px solid #f0f0f6}
+    .hero .wrap{padding:24px 16px}
+    .hero h1{margin:0 0 6px;font-size:28px}
+    .hero p{margin:0;color:var(--muted)}
+
+    /* Filters */
+    .filters{position:sticky;top:76px;z-index:40;background:#fff;border-bottom:1px solid #eee}
+    .filters .wrap{display:flex;gap:10px;flex-wrap:wrap}
+    .chip{padding:10px 12px;border-radius:999px;border:1px solid #eee;background:#fff;cursor:pointer}
+    .chip.active{background:#111;color:#fff}
+
+    /* Grid */
+    .grid{max-width:1200px;margin:24px auto;display:grid;gap:16px;padding:0 16px;grid-template-columns:repeat(auto-fill,minmax(200px,1fr))}
+    .card{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden;display:flex;flex-direction:column}
+    .thumb{aspect-ratio:1/1;background:#fafafa;display:grid;place-items:center}
+    .thumb .badge{position:absolute;margin:10px 0 0 10px;background:var(--brand);color:#fff;font-size:12px;padding:6px 8px;border-radius:999px;font-weight:700}
+    .content{padding:12px 14px;display:flex;flex-direction:column;gap:8px}
+    .title{font-weight:700;min-height:44px}
+    .price-row{display:flex;align-items:center;gap:8px}
+    .price{font-size:18px;font-weight:800}
+    .price del{color:#999;font-weight:500;font-size:14px}
+    .tag{font-size:12px;background:#eef9f3;color:#065f46;padding:4px 8px;border-radius:999px}
+    .actions{margin-top:auto;display:flex;gap:8px}
+    .btn{flex:1;padding:10px 12px;border-radius:12px;border:0;cursor:pointer;font-weight:700}
+    .btn.primary{background:var(--brand);color:#fff}
+    .btn.secondary{background:#111;color:#fff}
+
+    /* Cart drawer */
+    .drawer{position:fixed;inset-block:0;right:-420px;width:360px;background:#fff;box-shadow:-20px 0 40px rgba(0,0,0,.12);transition:right .3s ease;z-index:60;display:flex;flex-direction:column}
+    .drawer.open{right:0}
+    .drawer header{padding:16px 16px;border-bottom:1px solid #eee;font-weight:800;display:flex;justify-content:space-between;align-items:center}
+    .drawer .items{flex:1;overflow:auto;padding:12px 16px;display:flex;flex-direction:column;gap:10px}
+    .drawer .item{display:grid;grid-template-columns:48px 1fr auto;gap:10px;align-items:center;border:1px solid #f0f0f0;border-radius:12px;padding:8px}
+    .drawer .foot{border-top:1px solid #eee;padding:12px 16px;display:grid;gap:10px}
+
+    /* Cadastro */
+    .cadastro{max-width:1200px;margin:40px auto;padding:0 16px}
+    .cadastro .box{background:#fff;border-radius:var(--radius);box-shadow:var(--shadow);padding:20px}
+    .cadastro h2{margin:0 0 10px}
+    .form{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+    .form input,.form textarea{width:100%;padding:12px;border-radius:12px;border:1px solid #e7e7ef}
+    .form .full{grid-column:1/-1}
+    .form button{padding:12px 16px;border-radius:12px;border:0;background:#111;color:#fff;font-weight:800;cursor:pointer}
+    .ok{color:var(--ok);font-weight:700}
+
+    /* Footer (rodapé) */
+    footer{margin-top:40px;background:#111;color:#fff}
+    footer .wrap{padding:18px 16px;display:flex;flex-wrap:wrap;gap:10px;justify-content:space-between;align-items:center}
+    footer small{color:#ddd}
+    footer a{color:#fff;text-decoration:underline}
+
+    /* Utilities */
+    .hidden{display:none}
+    .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+  </style>
+</head>
+<body>
+  <!-- Top header with emoji cart that changes its background color on hover -->
+  <div class="topbar">
+    <div class="wrap row between">
+      <div class="logo" aria-label="Lojinha da Sarah">
+        <div class="cart-emoji" id="cartEmoji" title="Carrinho">
+          <span>🛒</span>
+        </div>
+        <div>
+          <div style="font-size:18px">Lojinha da Sarah</div>
+          <small style="color:var(--muted)">Preços baixos todos os dias</small>
+        </div>
+      </div>
+
+      <form class="search" id="searchForm" role="search" aria-label="Barra de pesquisa">
+        <label class="sr-only" for="q">Pesquisar</label>
+        <input id="q" name="q" type="search" placeholder="Pesquisar produtos (ex.: bíblia, fogão, câmera)" />
+        <select id="categorySelect" aria-label="Categoria">
+          <option value="">Todas as categorias</option>
+          <option value="fe">Bíblias & Harpa Cristã</option>
+          <option value="cozinha">Cozinha</option>
+          <option value="banheiro">Banheiro</option>
+          <option value="seguranca">Segurança</option>
+          <option value="outros">Outros</option>
+        </select>
+        <button type="submit" title="Buscar">Buscar</button>
+      </form>
+
+      <div class="icons">
+        <button class="mini" id="openCart" aria-haspopup="dialog" aria-controls="cartDrawer" title="Abrir carrinho">
+          <span class="label">Carrinho</span>
+          <span>🛒</span>
+          <span class="count" id="cartCount">0</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Secondary info bar under the header as requested -->
+  <div class="filters">
+    <div class="wrap">
+      <button class="chip active" data-chip="">Todos</button>
+      <button class="chip" data-chip="fe">Fé</button>
+      <button class="chip" data-chip="cozinha">Cozinha</button>
+      <button class="chip" data-chip="banheiro">Banheiro</button>
+      <button class="chip" data-chip="seguranca">Segurança</button>
+      <button class="chip" data-chip="outros">Outros</button>
+    </div>
+  </div>
+
+  <!-- Hero / intro -->
+  <section class="hero">
+    <div class="wrap">
+      <h1>Lojinha Online</h1>
+      <p>Oferta relâmpago hoje: frete grátis em compras acima de R$ 99,90. Itens com selo <strong>Preço baixo</strong> têm desconto adicional no carrinho.</p>
+    </div>
+  </section>
+
+  <!-- Products grid -->
+  <main class="grid" id="productGrid" aria-live="polite"></main>
+
+  <!-- Cart drawer -->
+  <aside class="drawer" id="cartDrawer" role="dialog" aria-label="Carrinho de compras">
+    <header>
+      <span>Seu carrinho</span>
+      <button class="btn secondary" id="closeCart" title="Fechar">Fechar</button>
+    </header>
+    <div class="items" id="cartItems"></div>
+    <div class="foot">
+      <div class="row between"><strong>Total</strong> <strong id="cartTotal">R$ 0,00</strong></div>
+      <button class="btn primary" id="checkoutBtn">Finalizar compra</button>
+      <small style="color:var(--muted)">* Simulação de loja para portfólio/estudo.</small>
+    </div>
+  </aside>
+
+  <!-- Cadastro no final -->
+  <section class="cadastro" id="cadastro">
+    <div class="box">
+      <h2>Cadastre-se para receber promoções</h2>
+      <p>Ganhe cupons exclusivos e novidades da loja.</p>
+      <form id="cadastroForm" class="form" autocomplete="on">
+        <input required name="nome" placeholder="Seu nome" />
+        <input required type="email" name="email" placeholder="Seu e-mail" />
+        <input name="whats" placeholder="WhatsApp (opcional)" />
+        <input name="cidade" placeholder="Cidade/Estado" />
+        <textarea class="full" name="obs" rows="3" placeholder="O que você procura?"></textarea>
+        <button type="submit">Cadastrar</button>
+        <span id="cadastroOK" class="ok hidden">Cadastro realizado! Verifique seu e-mail 😊</span>
+      </form>
+    </div>
+  </section>
+
+  <!-- Rodapé com informações solicitadas -->
+  <footer>
+    <div class="wrap">
+      <small>Todos os direitos reservados © <strong>Lojinha da Sarah</strong></small>
+      <div>
+        <a href="#cadastro" title="Mais informações">Mais informações</a> ·
+        <a href="#reclame" onclick="alert('Link demonstrativo para Reclame Aqui'); return false;" title="Reclame Aqui">Reclame Aqui</a> ·
+        <a href="tel:+5561999999999" title="Ligue para">Ligue para (61) 99999‑9999</a>
+      </div>
+      <small>@ lojinha da sarah</small>
+    </div>
+  </footer>
+
+  <script>
+    // ---------- Dados de produtos (exemplos) ----------
+    const PRODUTOS = [
+      {id:'b1', titulo:'Bíblia Sagrada - Letra Grande', categoria:'fe', preco:69.9, de:99.9, selo:true},
+      {id:'b2', titulo:'Harpa Cristã Luxo Capa Sintética', categoria:'fe', preco:49.9, de:79.9, selo:true},
+      {id:'b3', titulo:'Bíblia de Estudo (NVI)', categoria:'fe', preco:129.9, de:179.9, selo:false},
+      {id:'k1', titulo:'Fogão 4 bocas Econômico', categoria:'cozinha', preco:899.9, de:1199.9, selo:true},
+      {id:'k2', titulo:'Pia Inox 120cm c/ Cuba', categoria:'cozinha', preco:559.9, de:699.9, selo:false},
+      {id:'k3', titulo:'Torneira Gourmet Flexível', categoria:'cozinha', preco:139.9, de:199.9, selo:true},
+      {id:'bth1', titulo:'Kit Torneira de Banheiro', categoria:'banheiro', preco:89.9, de:129.9, selo:true},
+      {id:'bth2', titulo:'Cuba de Apoio Cerâmica', categoria:'banheiro', preco:219.9, de:299.9, selo:false},
+      {id:'seg1', titulo:'Câmera Wi‑Fi 1080p Interna', categoria:'seguranca', preco:159.9, de:249.9, selo:true},
+      {id:'seg2', titulo:'Kit 2 Câmeras Externas', categoria:'seguranca', preco:399.9, de:549.9, selo:false},
+      {id:'o1', titulo:'Jogo de Panos de Prato (12u)', categoria:'outros', preco:39.9, de:59.9, selo:true},
+      {id:'o2', titulo:'Tapete Antiderrapante 60x40', categoria:'outros', preco:29.9, de:49.9, selo:false},
+    ];
+
+    // ---------- Utils ----------
+    const BRL = new Intl.NumberFormat('pt-BR',{style:'currency',currency:'BRL'});
+    const grid = document.getElementById('productGrid');
+    const cartDrawer = document.getElementById('cartDrawer');
+    const cartCount = document.getElementById('cartCount');
+    const cartItems = document.getElementById('cartItems');
+    const cartTotal = document.getElementById('cartTotal');
+    const openCartBtn = document.getElementById('openCart');
+    const closeCartBtn = document.getElementById('closeCart');
+
+    function svgDataUri(text){
+      const svg = encodeURIComponent(`<?xml version='1.0'?>\n<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 400'>\n  <defs>\n    <linearGradient id='g' x1='0' x2='1' y1='0' y2='1'>\n      <stop offset='0' stop-color='%23ff4d4f'/>\n      <stop offset='1' stop-color='%23ff7a45'/>\n    </linearGradient>\n  </defs>\n  <rect width='100%' height='100%' fill='url(%23g)'/>\n  <text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' font-size='28' font-weight='700' fill='white' font-family='Arial, Helvetica, sans-serif'>${text}</text>\n</svg>`);
+      return `data:image/svg+xml;charset=UTF-8,${svg}`;
+    }
+
+    function render(products){
+      grid.innerHTML = '';
+      products.forEach(p=>{
+        const card = document.createElement('article');
+        card.className = 'card';
+        card.setAttribute('data-id', p.id);
+        card.setAttribute('data-cat', p.categoria);
+        card.innerHTML = `
+          <div class='thumb'>
+            <img alt='${p.titulo}' src='${svgDataUri(p.titulo)}' />
+            ${p.selo?`<span class="badge">Preço baixo</span>`:''}
+          </div>
+          <div class='content'>
+            <div class='title'>${p.titulo}</div>
+            <div class='price-row'>
+              <div class='price'>${BRL.format(p.preco)}</div>
+              ${p.de?`<del>${BRL.format(p.de)}</del>`:''}
+            </div>
+            <span class='tag'>Frete grátis*</span>
+            <div class='actions'>
+              <button class='btn primary' data-add='${p.id}'>Adicionar</button>
+              <button class='btn secondary' data-buy='${p.id}'>Comprar</button>
+            </div>
+          </div>`;
+        grid.appendChild(card);
+      });
+    }
+
+    // ---------- Busca / filtros ----------
+    function filtrar(){
+      const q = document.getElementById('q').value.trim().toLowerCase();
+      const cat = document.getElementById('categorySelect').value;
+      const list = PRODUTOS.filter(p=>{
+        const matchQ = !q || p.titulo.toLowerCase().includes(q);
+        const matchC = !cat || p.categoria === cat;
+        return matchQ && matchC;
+      });
+      render(list);
+    }
+
+    document.getElementById('searchForm').addEventListener('submit', (e)=>{e.preventDefault(); filtrar();});
+    document.getElementById('categorySelect').addEventListener('change', filtrar);
+    document.querySelectorAll('.chip').forEach(ch=>{
+      ch.addEventListener('click',()=>{
+        document.querySelectorAll('.chip').forEach(c=>c.classList.remove('active'));
+        ch.classList.add('active');
+        const v = ch.dataset.chip || '';
+        document.getElementById('categorySelect').value = v;
+        filtrar();
+        window.scrollTo({top:document.querySelector('.filters').offsetTop, behavior:'smooth'});
+      })
+    })
+
+    // ---------- Carrinho ----------
+    const CART_KEY = 'lojinha_cart_v1';
+    let cart = JSON.parse(localStorage.getItem(CART_KEY) || '[]');
+
+    function saveCart(){
+      localStorage.setItem(CART_KEY, JSON.stringify(cart));
+    }
+    function addToCart(id){
+      const item = cart.find(i=>i.id===id);
+      if(item){ item.qtd++; }
+      else{ cart.push({id, qtd:1}); }
+      bounceCartEmoji();
+      updateCartUI();
+      saveCart();
+    }
+    function removeFromCart(id){
+      cart = cart.filter(i=>i.id!==id);
+      updateCartUI();
+      saveCart();
+    }
+    function changeQty(id,delta){
+      const item = cart.find(i=>i.id===id);
+      if(!item) return;
+      item.qtd = Math.max(1, item.qtd + delta);
+      updateCartUI();
+      saveCart();
+    }
+    function cartDetails(){
+      return cart.map(ci=>{
+        const p = PRODUTOS.find(x=>x.id===ci.id);
+        return {...p,qtd:ci.qtd, subtotal:p.preco*ci.qtd};
+      });
+    }
+    function updateCartUI(){
+      const det = cartDetails();
+      const total = det.reduce((s,i)=>s+i.subtotal,0);
+      cartCount.textContent = det.reduce((s,i)=>s+i.qtd,0);
+      cartItems.innerHTML = det.length? det.map(i=>`
+        <div class='item'>
+          <img alt='${i.titulo}' src='${svgDataUri(i.titulo)}' width='48' height='48' />
+          <div>
+            <div style='font-weight:700'>${i.titulo}</div>
+            <small>${BRL.format(i.preco)} · <button style='border:0;background:none;color:var(--brand);cursor:pointer' data-remove='${i.id}'>remover</button></small>
+          </div>
+          <div style='display:flex;gap:6px;align-items:center'>
+            <button class='btn secondary' data-qty='-1' data-id='${i.id}' title='Diminuir'>−</button>
+            <strong>${i.qtd}</strong>
+            <button class='btn secondary' data-qty='1' data-id='${i.id}' title='Aumentar'>+</button>
+          </div>
+        </div>`).join('') : "<small style='color:var(--muted)'>Seu carrinho está vazio</small>";
+      cartTotal.textContent = BRL.format(total);
+    }
+
+    function openCart(){ cartDrawer.classList.add('open'); }
+    function closeCart(){ cartDrawer.classList.remove('open'); }
+    openCartBtn.addEventListener('click', openCart);
+    closeCartBtn.addEventListener('click', closeCart);
+    document.getElementById('checkoutBtn').addEventListener('click', ()=>{
+      if(cart.length===0){ alert('Seu carrinho está vazio.'); return; }
+      alert('Compra simulada! Obrigado por comprar na Lojinha da Sarah.');
+      cart = []; saveCart(); updateCartUI(); closeCart();
+    });
+
+    cartItems.addEventListener('click', (e)=>{
+      const t = e.target;
+      if(t.dataset.remove){ removeFromCart(t.dataset.remove); return; }
+      if(t.dataset.qty){ changeQty(t.dataset.id, Number(t.dataset.qty)); return; }
+    });
+
+    // ---------- Interações nos cards ----------
+    grid.addEventListener('click', (e)=>{
+      const add = e.target.closest('[data-add]');
+      const buy = e.target.closest('[data-buy]');
+      if(add){ addToCart(add.dataset.add); }
+      if(buy){ addToCart(buy.dataset.buy); openCart(); }
+    });
+
+    // ---------- Cadastro ----------
+    document.getElementById('cadastroForm').addEventListener('submit', (e)=>{
+      e.preventDefault();
+      const data = Object.fromEntries(new FormData(e.target).entries());
+      const LIST_KEY = 'lojinha_cadastros_v1';
+      const list = JSON.parse(localStorage.getItem(LIST_KEY) || '[]');
+      list.push({...data, dt:new Date().toISOString()});
+      localStorage.setItem(LIST_KEY, JSON.stringify(list));
+      e.target.reset();
+      document.getElementById('cadastroOK').classList.remove('hidden');
+      setTimeout(()=>document.getElementById('cadastroOK').classList.add('hidden'), 3000);
+    });
+
+    // ---------- Efeitos do emoji do carrinho ----------
+    const cartEmoji = document.getElementById('cartEmoji');
+    function randomHue(){ return Math.floor(Math.random()*360); }
+    function recolorEmoji(){
+      const h = randomHue();
+      cartEmoji.style.background = `conic-gradient(from ${h}deg, var(--brand), var(--brand-2))`;
+    }
+    function bounceCartEmoji(){
+      recolorEmoji();
+      cartEmoji.animate([
+        {transform:'scale(1)'},
+        {transform:'scale(1.2)'},
+        {transform:'scale(1)'}
+      ],{duration:300});
+    }
+    cartEmoji.addEventListener('click', openCart);
+
+    // ---------- Inicialização ----------
+    render(PRODUTOS);
+    updateCartUI();
+
+    // Aplicar busca inicial se houver hash ?q=
+    const params = new URLSearchParams(location.search);
+    if(params.get('q')){
+      document.getElementById('q').value = params.get('q');
+      filtrar();
+    }
+  </script>
+</body>
+</html>
